@@ -99,7 +99,7 @@
   </div>
 
   <!-- Asset summary cards remain in body -->
-  <div class="asset-summary-cards">
+  <!-- <div class="asset-summary-cards">
     <div
       class="summary-card ms-2"
       *ngFor="let summary of assetSummaries"
@@ -110,7 +110,24 @@
       <h4>{{ summary.type }}</h4>
       <p>{{ summary.count }} assets</p>
     </div>
+  </div> -->
+  <div class="asset-summary-cards">
+  <div
+    class="summary-card ms-2"
+    *ngFor="let summary of assetSummaries"
+    (dblclick)="goToAssetDashboardWithType(summary.type)"
+    style="cursor: pointer;"
+    title="Double-click to view details"
+  >
+    <h4>
+      {{ summary.type }}
+      <button class="btn btn-sm btn-secondary ms-2" (click)="deleteAssetType(summary.type)" title="Delete Type">
+        <i class="bi bi-trash"></i>
+      </button>
+    </h4>
+    <p>{{ summary.count }} assets</p>
   </div>
+</div>
   <div class="modal-backdrop" *ngIf="showAddTypeModal"></div>
   <div class="modal" *ngIf="showAddTypeModal">
     <div class="modal-content">

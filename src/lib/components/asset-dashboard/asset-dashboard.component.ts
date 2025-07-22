@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import { QRCodeComponent } from 'angularx-qrcode';
+
 
 @Component({
   selector: 'app-asset-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, QRCodeComponent],
   templateUrl: './asset-dashboard.component.html',
   styleUrls: ['./asset-dashboard.component.css']
 })
@@ -206,4 +208,34 @@ viewAllAssets() {
       this.showAllAssetsGrid = true;
     });
 }
+showQrModal = false;
+qrAssetTag: number | null = null;
+
+get qrUrl(): string {
+  if (!this.qrAssetTag) return '';
+  const base = window.location.origin;
+  return `${base}/asset-view/${this.qrAssetTag}`;
+}
+
+openQrModal(assetTag: number) {
+  this.qrAssetTag = assetTag;
+  this.showQrModal = true;
+}
+
+closeQrModal() {
+  this.showQrModal = false;
+  this.qrAssetTag = null;
+}
+
+downloadQrCode() {
+  const canvas = document.querySelector('#qrCanvas canvas') as HTMLCanvasElement;
+  if (canvas) {
+    const image = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = `asset-${this.qrAssetTag}-qrcode.jpg`;
+    link.click();
+  }
+}
+
 }

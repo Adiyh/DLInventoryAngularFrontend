@@ -39,7 +39,7 @@
       </label>
 
       <table class="gantt-grid-table">
-        <thead>
+        <!-- <thead>
           <tr>
             <th>Summary</th>
             <th>Type</th>
@@ -47,6 +47,7 @@
             <th>Start Date</th>
             <th>Original Merge Date</th>
             <th>Current Merge Date</th>
+         
             <th>Progress</th>
             <th>Actions</th>
             <th>Loader</th>
@@ -62,6 +63,7 @@
             <td>
               <input type="date" [(ngModel)]="task.end" [name]="'end-' + task.id" />
             </td>
+           
             <td>
               <input type="number" [(ngModel)]="task.progress" [name]="'progress-' + task.id" />%
             </td>
@@ -72,7 +74,50 @@
               <button type="button" style="background: #29307c; color: white;" (click)="showGanttChart()">Refresh Chart</button>
             </td>
           </tr>
-        </tbody>
+        </tbody> -->
+        <thead>
+  <tr>
+    <th>Summary</th>
+    <th>Type</th>
+    <th>Resource</th>
+    <th>Start Date</th>
+    <th>Original Merge Date</th>
+    <th>Current Merge Date</th>
+    <th>Tester Release Date</th> <!-- New -->
+    <th>Due Date</th>             <!-- New -->
+    <th>Progress</th>
+    <th>Actions</th>
+    <th>Loader</th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let task of filteredTasks" (dblclick)="onRowDblClick(task)">
+    <td>{{ task.title }}</td>
+    <td>{{ task.type }}</td>
+    <td>{{ getResourceName(task.id) }}</td>
+    <td>{{ task.start }}</td>
+    <td>{{ getOriginalMergeDate(task.id) }}</td>
+    <td>
+      <input type="date" [(ngModel)]="task.end" [name]="'end-' + task.id" />
+    </td>
+    <td>
+      <input type="date" [(ngModel)]="task.testerReleaseDate" [name]="'testerReleaseDate-' + task.id" />
+    </td>
+    <td>
+      <input type="date" [(ngModel)]="task.dueDate" [name]="'dueDate-' + task.id" />
+    </td>
+    <td>
+      <input type="number" [(ngModel)]="task.progress" [name]="'progress-' + task.id" />%
+    </td>
+    <td>
+      <button type="button" style="background: #29307c; color: white;" (click)="saveTask(task)">Save</button>
+    </td>
+    <td>
+      <button type="button" style="background: #29307c; color: white;" (click)="showGanttChart()">Refresh Chart</button>
+    </td>
+  </tr>
+</tbody>
+
       </table>
     </div>
 

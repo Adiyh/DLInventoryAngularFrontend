@@ -259,4 +259,28 @@ getDisplayKeys(asset: any): string[] {
 getAssetKeys(asset: any): string[] {
   return asset ? Object.keys(asset) : [];
 }
+deleteAssetType(type: string) {
+  if (!type) return;
+  if (!confirm(`Delete asset type "${type}" and all its assets?`)) return;
+
+  // Remove from hardcoded list if present
+  const idx = this.essentialAssetTypes.indexOf(type);
+  if (idx !== -1) {
+    this.essentialAssetTypes.splice(idx, 1);
+  }
+
+  // Remove from backend (dynamic types) using POST
+  this.http.post(`${this.apiBaseUrl}/api/assets/types/delete/${encodeURIComponent(type)}`, {})
+    .subscribe({
+      next: () => {
+        this.fetchAssetTypes();
+        this.fetchAssetSummaries();
+        if (this.selectedAssetType === type) this.selectedAssetType = '';
+      },
+      error: err => {
+        alert(err.error || 'Failed to delete asset type.');
+      }
+    });
+}
+
 }

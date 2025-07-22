@@ -7,12 +7,13 @@
       <option *ngFor="let type of assetTypes" [value]="type">{{ type }}</option>
     </select>
     <span class="custom-select-arrow">&#9662;</span>
+     <button class="btn btn-secondary mb-3" (click)="goToPreviousPage()">Back</button>
+           <button class="btn btn-primary ms-2" (click)="viewAllAssets()">View All Assets</button>
 
   </div>
   <div>
-    <button class="btn btn-secondary mb-3" (click)="goToPreviousPage()">Back</button>
+   
   </div>
-      <button class="btn btn-primary ms-2" (click)="viewAllAssets()">View All Assets</button>
 
   <!-- Table for selected type assets -->
   <table class="table table-bordered" *ngIf="assets.length && !showAllAssetsGrid">
@@ -30,6 +31,7 @@
         <td>{{ asset.EmployeeId }}</td>
         <td>
           <button class="btn btn-info btn-sm" (click)="openViewAsset(asset)">View</button>
+          <button class="btn btn-dark btn-sm ms-2" (click)="openQrModal(asset.AssetId)">QR</button>
         </td>
         <td>
           <button class="btn btn-warning btn-sm me-2" (click)="openEditAsset(asset)">Edit</button>
@@ -50,7 +52,8 @@
           <th>AssetId</th>
           <th>Type</th>
           <th>EmployeeId</th>
-          <th>View</th>
+          <th>Actions</th>
+      
         </tr>
       </thead>
       <tbody>
@@ -59,13 +62,33 @@
           <td>{{ asset.Type }}</td>
           <td>{{ asset.EmployeeId }}</td>
           <td>
-            <button class="btn btn-info btn-sm" (click)="openViewAsset(asset)">View</button>
+            <button class="btn btn-info btn-sm" (click)="openViewAsset(asset)">View</button> 
+            <button class="btn btn-dark btn-sm ms-2" (click)="openQrModal(asset.AssetId)">QR</button>
+             <button class="btn btn-warning btn-sm ms-2" (click)="openEditAsset(asset)">Edit</button>
+          <button class="btn btn-danger btn-sm ms-2" (click)="deleteAsset(asset.Id)">Delete</button>
           </td>
+        
         </tr>
       </tbody>
     </table>
     <button class="btn btn-secondary" (click)="showAllAssetsGrid = false">Close</button>
   </div>
+  <!-- QR Code Modal -->
+<div class="modal-backdrop" *ngIf="showQrModal"></div>
+<div class="modal" *ngIf="showQrModal">
+  <div class="modal-content text-center">
+    <h5>QR Code</h5>
+    <div id="qrCanvas">
+      <qrcode [qrdata]="qrUrl" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+   
+    <div class="mt-3">
+      <button class="btn btn-success" (click)="downloadQrCode()">Download QR</button>
+      <button class="btn btn-secondary ms-2" (click)="closeQrModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 
   <!-- View Asset Modal -->
   <div class="modal-backdrop" *ngIf="showViewModal"></div>
